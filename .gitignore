@@ -1,0 +1,8 @@
+# MCP（pi / Claude 等 AI 工具的本机 MCP 配置，含用户级路径，不入库）
+.mcp.json
+
+# 编辑器/系统
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
