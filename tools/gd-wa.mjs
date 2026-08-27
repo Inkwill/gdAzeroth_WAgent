@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * gd-wa — gdAzeroth (WAgent) 分控内 CLI（v0.2.3）
+ * gd-wa — gdAzeroth (WAgent) 分控内 CLI（v0.2.5）
  * 命名规范：`gd-` 前缀 + 分控代号缩写（wa = WAgent），三层 `<bin> <能力id> <动作>`
  * 当前子命令：
  *   worldview new <切片名> --project <项目id> [--out <路径>]  世界观切片骨架（v0.2.1）
@@ -8,6 +8,7 @@
  *   art new <切片名> --project <项目id> [--out <路径>]        美术需求规格（v0.2.3）
  *   art gen <切片名> --project <项目id> [--seed 42] [--provider comfy|dry-run]
  *                                                            参考图生成（v0.2.4）
+ *   slice export --project <项目id> [--out <路径>]            切片装配导出（v0.2.5）
  *
  * 不做：内容生成（高概念/设定/术语是创作产物）；不与总控 gd 命令冲突。
  */
@@ -17,6 +18,7 @@ import { dirname, join, isAbsolute } from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkProject, renderReport } from "./check.mjs";
 import { genArt } from "./artgen.mjs";
+import { scanSlices, renderIndex } from "./export.mjs";
 
 // ── 极简 YAML 解析（仅支持 v0.2.1 skeleton.yaml 所需子集） ──────────────
 // 支持：2 空格缩进 / map / list of map / block scalar (`|` `>`) / 行尾注释 / 引号
@@ -123,7 +125,7 @@ function renderSlice(skeleton, meta, opts = {}) {
 // ── CLI 入口 ──────────────────────────────────────────────────────────────
 function usage() {
   const here = fileURLToPath(import.meta.url);
-  console.log(`gd-wa — gdAzeroth (WAgent) 分控内 CLI（v0.2.4）\n\n用法：\n  gd-wa worldview new <切片名> --project <项目id> [--out <路径>]\n  gd-wa worldview check --project <项目id>\n  gd-wa art new <切片名> --project <项目id> [--out <路径>]\n  gd-wa art gen <切片名> --project <项目id> [--seed 42] [--provider comfy|dry-run]\n\n示例：\n  gd-wa worldview new demo-lore --project demo-foo\n  # 产物：CWD/projects/demo-foo/WAgent/demo-lore.md\n  gd-wa worldview check --project demo-foo\n  # 一致性检查：术语混用/定义冲突/设定锚点分歧\n  gd-wa art new hero-concept --project demo-foo\n  # 美术需求规格：CWD/projects/demo-foo/WAgent/hero-concept.md\n  gd-wa art gen hero-concept --project demo-foo --seed 42\n  # 参考图生成（ComfyUI）；--seed "42,43,44" 批量筛种\n\n位置：${here}`);
+  console.log(`gd-wa — gdAzeroth (WAgent) 分控内 CLI（v0.2.5）\n\n用法：\n  gd-wa worldview new <切片名> --project <项目id> [--out <路径>]\n  gd-wa worldview check --project <项目id>\n  gd-wa art new <切片名> --project <项目id> [--out <路径>]\n  gd-wa art gen <切片名> --project <项目id> [--seed 42] [--provider comfy|dry-run]\n  gd-wa slice export --project <项目id> [--out <路径>]\n\n示例：\n  gd-wa worldview new demo-lore --project demo-foo\n  gd-wa worldview check --project demo-foo\n  gd-wa art new hero-concept --project demo-foo\n  gd-wa art gen hero-concept --project demo-foo --seed 42\n  gd-wa slice export --project demo-foo\n  # 切片索引：projects/demo-foo/WAgent/index.md\n\n位置：${here}`);
 }
 
 function parseArgs(argv) {
@@ -165,6 +167,27 @@ function main() {
     console.log(renderReport(args.project, result));
     const errs = result ? result.issues.filter((i) => i.level === "error") : [];
     process.exit(errs.length > 0 ? 1 : 0);
+  }
+
+  // slice export — 切片装配导出（v0.2.5）
+  if (cmd === "slice" && action === "export") {
+    if (!args.project) { console.error("✗ 缺少 --project <项目id>"); usage(); process.exit(1); }
+    const projectDir = isAbsolute(args.project) ? args.project : join("projects", args.project);
+    const outPath = args.out ?? join(projectDir, "WAgent", "index.md");
+    const slices = scanSlices(projectDir);
+    if (!slices) {
+      console.log(`ℹ 项目 ${args.project} 没有可装配的切片（期望 projects/${args.project}/WAgent/*.md）`);
+      process.exit(0);
+    }
+    mkdirSync(join(projectDir, "WAgent"), { recursive: true });
+    writeFileSync(outPath, renderIndex(args.project, slices), "utf8");
+    const terms = [];
+    for (const s of slices) terms.push(...s.terms.map((t) => ({ ...t, from: s.name })));
+    console.log(`✅ 切片索引已导出：${outPath}`);
+    console.log(`   切片 ${slices.length} 个：${slices.map((s) => `${s.name}(${s.type})`).join("、")}`);
+    console.log(`   术语词典 ${terms.length} 条${terms.length > 0 ? "（跨切片汇总）" : ""}`);
+    console.log(`   用途：其他分控可只读引用此索引（v0.4.0 直达互调基础）`);
+    return;
   }
 
   // art gen — 参考图生成（v0.2.4）

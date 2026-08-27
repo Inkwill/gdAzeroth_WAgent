@@ -61,10 +61,10 @@ projects/<项目>/WAgent/   ← 世界观与表现切片（共享工作区）
 
 ## 快速开始
 
-- **能力工具链 CLI**：`gd-wa worldview new/check …` · `gd-wa art new/gen …`（详见 `docs/cli.md`）
+- **能力工具链 CLI**：`gd-wa worldview new/check · art new/gen · slice export …`（详见 `docs/cli.md`）
 - **单测**：`npm test`
 - **版本路线图**：`docs/roadmap.md`
-- 当前里程碑：v0.1.0 契约落地 ✅ · v0.2.1 世界观骨架模板 ✅
+- 当前里程碑：v0.1.0 契约 ✅ · **v0.2.0 能力工具链 ✅（v0.2.1-v0.2.5）**
 
 ---
 
@@ -81,6 +81,6 @@ projects/<项目>/WAgent/   ← 世界观与表现切片（共享工作区）
 | 提交规范（速览） | `CONTRIBUTING.md` | 源在 gdMain/CONTRIBUTING.md（单一事实源） |
 | 版本号 | `VERSION` | 当前版本（单一事实源） |
 | 能力声明 | `capabilities.yaml` | 接口契约 0.4.6 自持声明（已落盘） |
-| 能力工具链 CLI | `docs/cli.md` | `gd-wa worldview new/check · art new/gen …` 切片生成 / 一致性检查 / 美术规格 / 参考图 |
+| 能力工具链 CLI | `docs/cli.md` | `gd-wa worldview new/check · art new/gen · slice export …` 切片生成 / 一致性检查 / 美术规格 / 参考图 / 装配导出 |
 | 生图实战手册 | `docs/artgen-playbook.md` | ComfyUI 生图方法论：调用链/环境前置/排障/prompt 工程/筛种 |
 | 设计意图层 | `blueprint/README.md` | 身份与语义蓝图目录定位 |

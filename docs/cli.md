@@ -177,6 +177,30 @@ gd-wa art gen hero-concept --project demo-foo --seed 42
 - Z-Image Turbo（cfg=1）对负向 prompt 不敏感（FORBIDDEN 仍写入负向 + 元数据标注）
 - 模型总重约 19G，8G 显存需 ComfyUI 以 `--lowvram` 运行（否则 CUDA OOM）
 
+## slice export — 切片装配导出（v0.2.5）
+
+```bash
+gd-wa slice export --project <项目id> [--out <路径>]
+```
+
+扫描 `projects/<项目id>/WAgent/*.md` 全部切片，装配为索引 `index.md`（默认输出）：
+
+- **切片清单**：切片名 / 类型（worldview / art-spec）/ 摘要（首 section 正文首行）
+- **项目级术语词典**：跨切片汇总全部术语表（含来源切片）
+
+**用途**：其他分控可只读引用此索引——一份文档看全项目表现切片（v0.4.0 直达互调基础）。
+
+### 示例
+
+```bash
+gd-wa slice export --project demo-foo
+# → 切片索引已导出：projects/demo-foo/WAgent/index.md
+#   切片 2 个：demo-lore(worldview)、hero-concept(art-spec)
+#   术语词典 1 条（跨切片汇总）
+```
+
+> 生成物约定：`index.md` 为导出产物，每次重新生成覆盖；不参与一致性检查（scanSlices 自动排除）。
+
 ## 不做的事（边界）
 
 - ❌ 不生成内容（高概念/设定/术语是创作产物，模板只生成空骨架）
