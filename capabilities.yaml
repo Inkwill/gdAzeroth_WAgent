@@ -1,0 +1,50 @@
+# 能力声明 — gdAzeroth (WAgent) · 肌肤 · 外在感性包装
+# 规范见 gdMain blueprint/schemas/capabilities.md · JSON Schema 见 capabilities.schema.json
+# 自持于分控仓库根（0.4.6 分控侧闭环，v0.1.0 契约落地）；总控 blueprint/agents/azeroth/ 下为遗留同步副本
+# 约束：description 单行 / prerequisites 逗号字符串 / kebab-case id / 2 空格缩进
+
+agent: azeroth
+schema_version: 1
+updated: 2026-08-27
+
+capabilities:
+  - id: worldview-design
+    name: 世界观构建
+    description: 世界观架构与设定
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: ""
+    status: stable
+  - id: narrative-design
+    name: 叙事设计
+    description: 故事剧情与叙事文本
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: "azeroth:worldview-design"
+    status: stable
+  - id: art-style
+    name: 美术风格
+    description: 美术风格定位与参考资源
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: ""
+    status: stable
+  - id: cultural-language
+    name: 文化语言
+    description: 文化语境与语言风格
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: "azeroth:worldview-design"
+    status: stable
+  - id: ui-aesthetic
+    name: UI 美学
+    description: UI 的美学部分设计（表现）
+    input_kind: ref
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: ""
+    status: stable

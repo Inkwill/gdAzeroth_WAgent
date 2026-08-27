@@ -1,0 +1,17 @@
+{
+  "name": "gd-azeroth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "gdAzeroth (WAgent) · 肌肤 · 外在感性包装（分控仓库）",
+  "bin": {
+    "gd-wa": "./tools/gd-wa.mjs"
+  },
+  "scripts": {
+    "test": "node --test",
+    "gd-wa": "node tools/gd-wa.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

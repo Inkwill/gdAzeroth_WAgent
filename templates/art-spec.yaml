@@ -1,0 +1,82 @@
+# 美术需求规格切片骨架（v0.2.3）
+# 机器可读的 6 块骨架定义，供 gd-wa CLI 渲染；对齐 art-style 能力声明。
+# 设计要点：ART BRIEF 各维度带"自洽锚点"列（延续 ASPECTS 锚点理念，供一致性检查）；
+# FORBIDDEN 禁忌表（禁忌项|原因）与术语表"禁止混用"同思路，为后续检查器扩展铺路。
+# 规范见 docs/roadmap.md v0.2.3 · v1
+
+slice_type: art-spec
+version: 1
+
+sections:
+  - id: purpose
+    title: 需求定位
+    en: PURPOSE
+    description: 一段话：服务对象 + 用途
+    template: |
+      ## 需求定位（PURPOSE）
+
+      > <一句话：这份美术需求服务于什么（场景/角色/道具/UI），给谁用>
+      > <使用场景与交付物类型（概念图/参考图/风格图）>
+
+  - id: style-anchors
+    title: 风格锚点
+    en: STYLE ANCHORS
+    description: 风格关键词 / 参考作品 / 色彩倾向
+    template: |
+      ## 风格锚点（STYLE ANCHORS）
+
+      | 锚点 | 值 |
+      |------|-----|
+      | 风格关键词 |  |
+      | 参考作品/艺术家 |  |
+      | 色彩倾向 |  |
+      | 氛围基调 |  |
+
+  - id: art-brief
+    title: 美术简报
+    en: ART BRIEF
+    description: 关键视觉维度指导（色彩/光照/材质/构图/笔触）
+    template: |
+      ## 美术简报（ART BRIEF）
+
+      | 维度 | 指导 | 自洽锚点 |
+      |------|------|----------|
+      | 色彩 |  |  |
+      | 光照 |  |  |
+      | 材质 |  |  |
+      | 构图 |  |  |
+      | 笔触/细节密度 |  |  |
+
+  - id: spec
+    title: 规格
+    en: SPEC
+    description: 交付物规格（尺寸/数量/格式/分辨率）
+    template: |
+      ## 规格（SPEC）
+
+      | 项 | 值 |
+      |----|----|
+      | 尺寸 |  |
+      | 数量 |  |
+      | 格式 |  |
+      | 分辨率/质量 |  |
+
+  - id: must-have
+    title: 必备要素
+    en: MUST-HAVE
+    description: 必须出现的视觉要素
+    template: |
+      ## 必备要素（MUST-HAVE）
+
+      - 
+
+  - id: forbidden
+    title: 禁忌
+    en: FORBIDDEN
+    description: 禁止出现的内容（供一致性检查消费，与术语表禁止混用同思路）
+    template: |
+      ## 禁忌（FORBIDDEN）
+
+      | 禁忌项 | 原因 |
+      |--------|------|
+      |  |  |

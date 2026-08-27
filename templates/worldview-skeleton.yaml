@@ -1,0 +1,54 @@
+# 世界观切片骨架（v0.2.1）
+# 机器可读的 4 块骨架定义，供 gd-wa CLI 渲染与未来 0.2.2 一致性检查器消费。
+# 规范见 docs/roadmap.md v0.2.1 · v1
+
+slice_type: worldview
+version: 1
+
+sections:
+  - id: high-concept
+    title: 高概念
+    en: HIGH-CONCEPT
+    description: 一段话概括核心隐喻与卖点
+    template: |
+      ## 高概念（HIGH-CONCEPT）
+
+      > <一句话核心隐喻>
+      > <作品类型与玩家体验定位>
+
+  - id: tone-feel
+    title: 基调
+    en: TONE & FEEL
+    description: 视觉与叙事张力的两个维度
+    template: |
+      ## 基调（TONE & FEEL）
+
+      | 维度 | 描述 |
+      |------|------|
+      | 视觉 |  |
+      | 叙事张力 |  |
+
+  - id: aspects
+    title: 核心设定骨架
+    en: ASPECTS
+    description: 世界观/文化/语言/美术 各一行
+    template: |
+      ## 核心设定骨架（ASPECTS）
+
+      | 层面 | 设定 | 自洽锚点 |
+      |------|------|----------|
+      | 世界观 |  |  |
+      | 文化 |  |  |
+      | 语言 |  |  |
+      | 美术 |  |  |
+
+  - id: terminology
+    title: 术语表
+    en: TERMINOLOGY
+    description: 术语定义 + 禁止混用（0.3.2 一致性检查器消费结构）
+    template: |
+      ## 术语表（TERMINOLOGY）
+
+      | 术语 | 定义 | 禁止混用 |
+      |------|------|----------|
+      |  |  |  |
