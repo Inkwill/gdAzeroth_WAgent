@@ -1,0 +1,59 @@
+# 故事板切片骨架（v0.3.1）
+# 机器可读的 3 块骨架定义，供 gd-wa CLI 渲染；多场景由用户复制 `## 场景 · start` 块扩展。
+# 规范见 capabilities.yaml storyboard-design · v1
+# 范围（MVP）：纯线性 + 简单选项跳转（变量/状态后续看情况）
+
+slice_type: storyboard
+version: 1
+
+sections:
+  - id: meta
+    title: 元信息
+    en: META
+    description: 标题、简介、起始场景 id
+    template: |
+      ## 元信息（META）
+
+      | 字段 | 值 |
+      |------|-----|
+      | 标题 | <填写> |
+      | 简介 | <一句话> |
+      | 起始场景 | start |
+
+  - id: scene
+    title: 场景（复制此块扩展）
+    en: SCENE
+    description: |
+      每个 `## 场景 · <id>` 块定义一个 Ink knot；
+      选项每行：`选项文字 -> 目标场景 id`；
+      终止场景可不填选项。
+    template: |
+      ## 场景 · start
+
+      - 标题：开场
+      - 背景图：<可选，相对路径如 assets/ref-01.png>
+      - 文案：
+
+        ```
+        你醒来，发现自己在森林深处。
+
+        晨雾未散。
+        ```
+
+      - 选项：
+
+        ```
+        向北走 -> north
+        向南走 -> south
+        ```
+
+  - id: rules
+    title: 规则摘要
+    en: RULES
+    description: 胜负判定 / 核心循环（人类可读描述，演示型）
+    optional: true
+    template: |
+      ## 规则摘要（RULES）
+
+      - 胜负判定：<玩家抵达终点场景即通关>
+      - 核心循环：<阅读场景文案 → 选择 → 跳转下一场景>

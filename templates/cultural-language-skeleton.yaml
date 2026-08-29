@@ -1,0 +1,79 @@
+# 文化语言切片骨架（v0.3.3）
+# 机器可读的 6 块骨架定义，供 gd-wa CLI 渲染；
+# 术语表（TERMINOLOGY）自动纳入 v0.2.2 一致性检查（A1/A2/A3）与 v0.2.5 装配导出术语词典。
+
+slice_type: cultural-language
+version: 1
+
+sections:
+  - id: cultural-core
+    title: 文化核心
+    en: CULTURAL CORE
+    description: 文明起源 / 价值观 / 社会结构，各带自洽锚点
+    template: |
+      ## 文化核心（CULTURAL CORE）
+
+      | 维度 | 设定 | 自洽锚点 |
+      |------|------|----------|
+      | 文明起源 |  |  |
+      | 价值观 |  |  |
+      | 社会结构 |  |  |
+
+  - id: language
+    title: 语言体系
+    en: LANGUAGE
+    description: 语言风格 / 命名规则 / 口癖
+    template: |
+      ## 语言体系（LANGUAGE）
+
+      | 维度 | 设定 |
+      |------|------|
+      | 语言风格 |  |
+      | 命名规则 |  |
+      | 口癖/惯用语 |  |
+
+  - id: customs
+    title: 习俗礼仪
+    en: CUSTOMS
+    description: 习俗 / 场合 / 意义
+    template: |
+      ## 习俗礼仪（CUSTOMS）
+
+      | 习俗 | 场合 | 意义 |
+      |------|------|------|
+      |  |  |  |
+
+  - id: taboos
+    title: 禁忌戒律
+    en: TABOOS
+    description: 禁忌项 / 原因 / 后果（与 art-spec FORBIDDEN 同思路）
+    template: |
+      ## 禁忌戒律（TABOOS）
+
+      | 禁忌项 | 原因 | 后果 |
+      |------|------|------|
+      |  |  |  |
+
+  - id: text
+    title: 文化文本
+    en: TEXT
+    description: 谚语 / 常用语 / 敬语
+    template: |
+      ## 文化文本（TEXT）
+
+      - 谚语：
+
+      - 常用语：
+
+      - 敬语/称呼：
+
+  - id: terminology
+    title: 术语表
+    en: TERMINOLOGY
+    description: 术语定义 + 禁止混用（一致性检查器消费）
+    template: |
+      ## 术语表（TERMINOLOGY）
+
+      | 术语 | 定义 | 禁止混用 |
+      |------|------|----------|
+      |  |  |  |

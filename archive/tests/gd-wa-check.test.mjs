@@ -11,7 +11,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
-const cliPath = join(dirname(fileURLToPath(import.meta.url)), "..", "tools", "gd-wa.mjs");
+const cliPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "tools", "gd-wa.mjs");
 
 // ── 工具 ───────────────────────────────────────────────────────────────────
 function mkProject(t) {

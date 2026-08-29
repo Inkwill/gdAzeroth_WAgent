@@ -1,14 +1,15 @@
 # gd-wa CLI · 使用指南
 
 > v0.2.1 起（check 子命令 v0.2.2）。`gd-wa`（gd- 前缀 + WAgent 缩写）是分控内 CLI，遵循 main@gd 命名规范：硬前缀 `gd-` + 分控代号缩写（wa），三层 `<bin> <能力id> <动作>`。
-> 与总控 `gd` 命令无冲突（本工具仅作用于分控仓库内 `projects/<项目>/WAgent/` 切片生成）。
+> 与总控 `gd` 命令无冲突（本工具仅作用于切片生成）。
+> **0.5.0 衔接**：本工具默认在本地 `projects/<项目>/WAgent/` 生成切片（本地工作区）；交付时用 `gd deliverable add --deliverable "deliver_wa/xxx|kind|desc"` 登记到需求级 `reqs/<需求id>/deliver_wa/`（或用 `--out` 直接指向需求级路径）。
 
 ---
 
 ## 安装
 
 ```bash
-# 仓库根执行（已注册 bin 到 package.json）
+# 仓库根执行（CLI 已全局注册为 `gd-wa`）
 npm link             # 全局链接（开发期常用）
 # 或一次性执行：
 npx gd-wa --help
@@ -201,12 +202,94 @@ gd-wa slice export --project demo-foo
 
 > 生成物约定：`index.md` 为导出产物，每次重新生成覆盖；不参与一致性检查（scanSlices 自动排除）。
 
+## narrative new — 生成叙事切片骨架（v0.3.2）
+
+```bash
+gd-wa narrative new <切片名> --project <项目id> [--out <路径>]
+```
+
+行为同 worldview new（骨架渲染 / 拒绝覆盖 / 拒绝非法名），读 `templates/narrative-skeleton.yaml`（6 块）。
+
+### 切片结构（6 块）
+
+1. **叙事核心（NARRATIVE CORE）** —— 核心冲突 / 主题 / 情感弧线（带自洽锚点）
+2. **剧情结构（STRUCTURE）** —— 三幕/章节 + 关键节拍
+3. **角色（CHARACTERS）** —— 角色 / 动机 / 弧线
+4. **关键事件（EVENTS）** —— 事件 / 触发 / 结果
+5. **叙事文本（TEXT）** —— 开场旁白 / 关键台词 / 结局文本
+6. **术语表（TERMINOLOGY）** —— 自动纳入一致性检查（A1/A2/A3）与装配导出术语词典
+
+### 复用既有工具链（无需新代码）
+
+- `gd-wa worldview check --project <项目id>` —— 术语表自动纳入一致性检查（禁止混用等）
+- `gd-wa slice export --project <项目id>` —— 类型识别为 narrative + 术语词典跨切片汇总
+
+## cultural-language new — 生成文化语言切片骨架（v0.3.3）
+
+```bash
+gd-wa cultural-language new <切片名> --project <项目id> [--out <路径>]
+```
+
+行为同 worldview new（骨架渲染 / 拒绝覆盖 / 拒绝非法名），读 `templates/cultural-language-skeleton.yaml`（6 块）。
+
+### 切片结构（6 块）
+
+1. **文化核心（CULTURAL CORE）** —— 文明起源 / 价值观 / 社会结构（带自洽锚点）
+2. **语言体系（LANGUAGE）** —— 语言风格 / 命名规则 / 口癖
+3. **习俗礼仪（CUSTOMS）** —— 习俗 / 场合 / 意义
+4. **禁忌戒律（TABOOS）** —— 禁忌项 / 原因 / 后果（与 art-spec FORBIDDEN 同思路）
+5. **文化文本（TEXT）** —— 谚语 / 常用语 / 敬语
+6. **术语表（TERMINOLOGY）** —— 自动纳入一致性检查与装配导出术语词典
+
+### 复用既有工具链（同 narrative）
+
+- `gd-wa worldview check --project <项目id>` —— 术语表自动纳入一致性检查
+- `gd-wa slice export --project <项目id>` —— 类型识别为 cultural-language + 术语词典汇总
+
+## storyboard new — 生成故事板骨架（v0.3.1）
+
+```bash
+gd-wa storyboard new <切片名> --project <项目id> [--out <路径>]
+```
+
+行为同 worldview new（骨架渲染 / 拒绝覆盖 / 拒绝非法名），读 `templates/storyboard-skeleton.yaml`（3 块：元信息 / 场景示例 / 规则摘要）。
+
+### 切片结构（多场景由用户复制 `## 场景 · start` 块扩展）
+
+- **元信息（META）**：标题 / 简介 / 起始场景 id
+- **场景（SCENE）**：每个 `## 场景 · <id>` 块 = 一个 Ink knot——`标题` / `背景图`（引用路径）/ `文案`（代码块）/ `选项`（每行 `文字 -> 目标场景 id`）
+- **规则摘要（RULES）**（可选）：胜负判定 / 核心循环
+
+## storyboard render — 故事板 → 单文件 HTML demo（v0.3.1）
+
+```bash
+gd-wa storyboard render <切片名> --project <项目id> [--out <路径>]
+```
+
+### 行为
+
+1. 读切片 → 解析场景
+2. 转 Ink 源码（顶层 `-> 起始场景` + 每个场景一个 knot + 选项 divert）
+3. 调 inkjs CLI 编译 → BOM-free JSON
+4. 生成单文件 HTML（内嵌 inkjs runtime 128KB + JSON + 启动脚本，Blob URL 模式）
+
+### 产出
+
+- 默认 `projects/<项目id>/WAgent/<切片名>.html`——单文件，可本地双击打开或部署到任意静态服务器
+- 图片仅引用路径（不打包、不复制）
+
+### 已知限制
+
+- 正文/选项含 `${` 会与 Ink 插值语法冲突（编译报错含友好提示，请改写为文字描述）
+- MVP 纯线性 + 选项跳转；变量/分支/状态后续版本
+
 ## 不做的事（边界）
 
 - ❌ 不生成内容（高概念/设定/术语是创作产物，模板只生成空骨架）
 - ❌ 不与总控 `gd` 命令冲突（命名硬约束 `gd-` 前缀，但本工具走 npm bin，不污染总控 CLI）
 - ❌ 不做美术参考图生成（→ v0.2.4）
 - ❌ 不做切片装配/索引（→ v0.2.5）
+- ❌ storyboard 不做变量/分支/存档（→ rule-design 主能力领地，后续看情况）
 
 ## 骨架源（机器可读）
 

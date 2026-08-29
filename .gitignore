@@ -6,15 +6,18 @@
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# 依赖
+node_modules/
 # pi 运行时（gd 套件 skill 经 gdMain skills/ 单一事实源引用，不入库）
 .pi/
 
 # v0.3.1 CLI 生成的演练产物（不入库；产物随演练项目走总控 reqs 路径）
 projects/
 
-# 单测运行时产物（手动跑 CLI 演示生成；非 CLI 生成的源码文件以 tests/*.test.mjs 为准）
-tests/out-*.md
-tests/dup-*.md
+# 单测运行时产物（手动跑 CLI 演示生成；非 CLI 生成的源码文件以 archive/tests/*.test.mjs 为准）
+archive/tests/out-*.md
+archive/tests/dup-*.md
 
 # ComfyUI --lowvram 服务启动日志（进程持有写句柄，进程停后删除）
 comfy-lowvram*.log

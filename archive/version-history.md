@@ -1,6 +1,6 @@
 # gdAzeroth 版本历史归档（Roadmap History）
 
-> **本文件为归档**：已完成版本（v0.1.0 ~ v0.2.x）的完整明细 + 历史变更记录。**仅查阅历史时读取**；日常工作视图（上次完成总结 + 下一步计划）见 [roadmap.md](../roadmap.md)。
+> **本文件为归档**：已完成版本（v0.1.0 ~ v0.3.x）的完整明细 + 历史变更记录。**仅查阅历史时读取**；日常工作视图（上次完成总结 + 下一步计划）见 [roadmap.md](../roadmap.md)。
 > 归档只做事实保留，不随新版本更新；本文件末尾追加「归档更新日志」。
 
 ---
@@ -11,6 +11,9 @@
 |------|------|------|
 | v0.1.0 | 契约落地 · 能力声明自持 | ↓ v0.1.0 |
 | v0.2.0 | 能力工具链初版（v0.2.1~v0.2.5） | ↓ v0.2.0 |
+| v0.3.1 | storyboard-design 基础落地 | ↓ v0.3.1 |
+| v0.3.2 | narrative-design 基础落地 | ↓ v0.3.2 |
+| v0.3.3 | cultural-language 基础落地 | ↓ v0.3.3 |
 | — | 讨论待办（v0.2.0 拆分） | ↓ 讨论待办 |
 | — | 历史变更记录 | ↓ 变更记录 |
 
@@ -200,6 +203,84 @@
 
 ---
 
+## v0.3.1 — storyboard-design 基础落地（✅ 已完成 · 2026-08-29）
+
+**目标**：把 rulebook-design 更名为 storyboard-design（故事板），落地「文字+图片的纯演示型游戏」的最小能力——骨架 + Ink 管线 + 单文件 HTML。
+
+**选型**：方案 A——Ink + inkjs（MIT · 零传递依赖 · 纯 Node 可编译可运行，获奖 IF 游戏背书）。经 Q1~Q3 逐问答决策：依赖不关键 / 纯线性起步后续看情况 / 常规工具 → 选 A。
+
+**交付**：
+
+| # | 内容 | 可验收 |
+|---|------|--------|
+| 1 | `npm install inkjs`（v2.4.0） | package.json dependencies + 编译器 API 验证 |
+| 2 | `templates/storyboard-skeleton.yaml`（3 块：元信息 / 场景示例 / 规则摘要） | 文件存在；CLI 可渲染 |
+| 3 | `tools/storyboard.mjs`（parseStoryboard / toInk / compileInk / renderHtml） | 核心管线可调用 |
+| 4 | `gd-wa storyboard new` / `storyboard render` | CLI 可用 |
+| 5 | `archive/tests/gd-wa-storyboard.test.mjs`（17 项单测） | `npm test` 48/48 绿 |
+| 6 | `docs/cli.md` storyboard 章节 | 文档存在 |
+| 7 | `capabilities.yaml`：rulebook-design → storyboard-design + 描述更新 | 契约同步 |
+| 8 | `roadmap.md` v0.3.1 条目 | 速览更新 |
+
+**关键技术点（实测确认）**：
+
+- inkjs API：`import { Compiler } from 'inkjs/compiler/Compiler'`（Node 端编译）；浏览器端 `import { Story } from 'inkjs'`（`Continue`/`canContinue`/`currentChoices`/`ChooseChoiceIndex`）
+- **Ink 入口**：story 默认从 root 开始，knot 不会自动进入——必须在顶层写 `-> 起始场景`
+- **编译路径**：CLI 子进程 `node node_modules/inkjs/bin/inkjs-compiler.js -o out.json in.ink`（输出 UTF-8 BOM，需去除）
+- **HTML 嵌入**：JSON.stringify 转 runtime + JSON 为 JS 字面量（避免模板字符串转义陷阱）→ Blob URL → import()
+- **图片嵌入**：Ink 文本行直接输出 `<img>` 标签（`~ html()` 是错误语法）
+- **已知限制**：正文/选项含 `${` 会与 Ink 插值语法冲突（编译报错含友好提示）
+
+**端到端验证**：demo-cave 项目（6 场景洞穴探险）→ `storyboard new` + `storyboard render` → 132KB 单文件 HTML → Node 模拟浏览器完整游玩流程通过（start → cave_entrance → left_path → treasure 通关）
+
+**验收线**：✅ 48/48 单测绿；✅ 端到端完整游玩通过；✅ 演示数据已清理。
+
+## v0.3.2 — narrative-design 基础落地（✅ 已完成 · 2026-08-29）
+
+**目标**：落地叙事设计能力——叙事切片骨架 + CLI 注册，并**复用既有工具链**（一致性检查 / 装配导出），零新工具代码。
+
+**交付**：
+
+| # | 内容 | 可验收 |
+|---|------|--------|
+| 1 | `templates/narrative-skeleton.yaml`（6 块：叙事核心 / 剧情结构 / 角色 / 关键事件 / 叙事文本 / 术语表） | 文件存在；CLI 可渲染 |
+| 2 | `gd-wa narrative new`（复用 renderSlice + NEW 映射注册） | CLI 可用 |
+| 3 | `archive/tests/gd-wa-narrative.test.mjs`（6 项单测） | `npm test` 54/54 绿 |
+| 4 | `docs/cli.md` narrative 章节 | 文档存在 |
+| 5 | `roadmap.md` v0.3.2 条目 | 速览更新 |
+
+**设计要点**：
+
+- **复用优先**：narrative 骨架含 `（TERMINOLOGY）` 术语表 → 自动纳入 v0.2.2 一致性检查（A1 重名 / A2 跨切片分歧 / A3 禁止混用）与 v0.2.5 装配导出（类型识别 narrative + 术语词典）——无需改 check.mjs / export.mjs
+- 6 块结构延续 worldview（4 块）/ art-spec（6 块）风格，与既有切片同构
+
+**端到端冒烟**：demo-narr 项目（叙事切片 6 块 + 术语表 2 条）→ `narrative new` ✅ → `worldview check` ✅（0 错 0 警）→ `slice export` ✅（类型 narrative + 术语词典 2 条）；演示数据已清理
+
+**验收线**：✅ 54/54 单测绿；✅ 复用检查/导出验证通过；✅ 无残留。
+
+## v0.3.3 — cultural-language 基础落地（✅ 已完成 · 2026-08-29）
+
+**目标**：落地文化语言设计能力——文化语言切片骨架 + CLI 注册，复用既有工具链（一致性检查 / 装配导出），延续 v0.3.2 复用模式。
+
+**交付**：
+
+| # | 内容 | 可验收 |
+|---|------|--------|
+| 1 | `templates/cultural-language-skeleton.yaml`（6 块：文化核心 / 语言体系 / 习俗礼仪 / 禁忌戒律 / 文化文本 / 术语表） | 文件存在；CLI 可渲染 |
+| 2 | `gd-wa cultural-language new`（复用 renderSlice + NEW 映射注册） | CLI 可用 |
+| 3 | `archive/tests/gd-wa-cultural-language.test.mjs`（6 项单测） | `npm test` 60/60 绿 |
+| 4 | `docs/cli.md` cultural-language 章节 | 文档存在 |
+| 5 | `roadmap.md` v0.3.3 条目 | 速览更新 |
+
+**设计要点**：
+
+- 复用模式延续 v0.3.2：术语表自动纳入一致性检查（A1/A2/A3）与装配导出（类型识别 + 术语词典）
+- 禁忌戒律（TABOOS）块与 art-spec FORBIDDEN 同思路（禁忌项/原因/后果）——文化禁忌与美术禁忌语义对齐
+
+**端到端冒烟**：demo-cl 项目（精灵族文化切片 6 块 + 术语表 2 条）→ `cultural-language new` ✅ → `worldview check` ✅（0 错 0 警）→ `slice export` ✅（类型 cultural-language + 术语词典 2 条）；演示数据已清理
+
+**验收线**：✅ 60/60 单测绿；✅ 复用检查/导出验证通过；✅ 无残留。
+
 ## 讨论待办（v0.2.0 拆分 · 已全部完成）
 
 - [x] v0.2.0 拆分草案已出——逐项讨论中
@@ -226,6 +307,11 @@
 | 2026-08-27 | v0.2.4 真实出图联调 ✅：ComfyUI 以 `--lowvram` 重启（Start-Process 后台，日志 comfy-lowvram*.log 已 gitignore）→ `art gen --seed 42` 一次通过，`ref-42.png`（1.39MB）+ refs.json 元数据完整；演示清理；ComfyUI 现以 lowvram 模式运行（桌面版 UI 断连需重连） |
 | 2026-08-27 | 方法论沉淀：新增 `docs/artgen-playbook.md`（生图实战手册——调用链/环境前置/排障手册含 6 个实测坑/prompt 工程/可追溯筛种/边界/演进），README 文档导航同步 |
 | 2026-08-27 | v0.2.5 切片装配导出完成：`tools/export.mjs`（scanSlices/renderIndex/术语词典汇总）+ `gd-wa slice export` + 5 项新单测（`npm test` 31/31）+ docs/cli.md 章节；冒烟装配 demo 项目 2 切片+1 术语；**v0.2.0 全部子版本完成 → VERSION/package.json → 0.2.0；v0.2.0 转 ✅ 已完成** |
+| 2026-08-29 | v0.3.1 storyboard-design 基础落地：rulebook-design → storyboard-design 更名；inkjs v2.4.0 依赖 + `templates/storyboard-skeleton.yaml` + `tools/storyboard.mjs`（parse/toInk/compileInk/renderHtml）+ `gd-wa storyboard new/render` + 17 项新单测（`npm test` 48/48）+ docs/cli.md 章节 + capabilities.yaml 契约同步 + roadmap v0.3.1 条目；端到端 demo-cave 完整游玩通过 |
+| 2026-08-29 | v0.3.2 narrative-design 基础落地：`templates/narrative-skeleton.yaml`（6 块）+ `gd-wa narrative new`（复用 renderSlice）+ 6 项新单测（`npm test` 54/54）+ docs/cli.md 章节 + roadmap v0.3.2 条目；术语表自动纳入一致性检查/装配导出（零新工具代码）；端到端 demo-narr 冒烟通过 |
+| 2026-08-29 | v0.3.3 cultural-language 基础落地：`templates/cultural-language-skeleton.yaml`（6 块）+ `gd-wa cultural-language new`（复用 renderSlice）+ 6 项新单测（`npm test` 60/60）+ docs/cli.md 章节 + roadmap v0.3.3 条目；端到端 demo-cl 冒烟通过 |
+| 2026-08-29 | 能力范围收缩：删除 ui-aesthetic 子能力 + 音频（capabilities.yaml / README / roadmap 同步）；mail 通知总控同步 manifest；roadmap 待办备忘清空 |
+| 2026-08-29 | **gdMain 0.5.0 协作方式变更落地**（总控 mail 通知）：认领制取代拉取（task-list.yaml + `gd task status accepted`）；产出落需求级 `reqs/<需求id>/deliver_wa/`（不再项目级 WAgent/）；分控端不建 projects/（本地空壳已删）；无 rejected（不接 = 保持 new + mail question）；AGENTS.md/README/roadmap 协作引用已同步 0.5.0 语义 |
 
 ---
 
@@ -234,3 +320,7 @@
 | 日期 | 事件 |
 |------|------|
 | 2026-08-29 | 与总控同款整理：v0.1.0 ~ v0.2.x 完整明细自 docs/roadmap.md 迁入本文件（原样保留）；docs/roadmap.md 转为「上次完成总结 + 下一步计划」工作视图 |
+| 2026-08-29 | v0.3.1 明细追加（storyboard-design 基础落地），归档索引 + 变更记录同步 |
+| 2026-08-29 | v0.3.2 明细追加（narrative-design 基础落地），归档索引 + 变更记录同步 |
+| 2026-08-29 | v0.3.3 明细追加（cultural-language 基础落地），归档索引 + 变更记录同步 |
+| 2026-08-29 | 能力范围收缩 + gdMain 0.5.0 协作方式变更记录（认领制/deliver_wa），归档索引 + 变更记录同步 |

@@ -10,10 +10,11 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { parseArtSpec, buildPrompts } from "../tools/prompt.mjs";
-import { genArt } from "../tools/artgen.mjs";
+import { parseArtSpec, buildPrompts } from "../../tools/prompt.mjs";
+import { genArt } from "../../tools/artgen.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
+const root = join(here, "..", "..");
 
 // ── 构造 art spec 切片 ─────────────────────────────────────────────────────
 function mkArtSpec(dir, name) {
@@ -147,7 +148,7 @@ test("genArt 切片不存在 → 报错", async (t) => {
 
 test("CLI: art gen 对不存在切片报错（exit 1）", async (t) => {
   const { spawnSync } = await import("node:child_process");
-  const cliPath = join(here, "..", "tools", "gd-wa.mjs");
+  const cliPath = join(root, "tools", "gd-wa.mjs");
   const dir = mkdtempSync(join(tmpdir(), "gdwa-gen-"));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   const r = spawnSync(process.execPath, [cliPath, "art", "gen", "ghost", "--project", "p", "--provider", "dry-run"], { encoding: "utf8", cwd: dir });

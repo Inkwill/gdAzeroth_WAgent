@@ -1,0 +1,77 @@
+# 叙事切片骨架（v0.3.2）
+# 机器可读的 6 块骨架定义，供 gd-wa CLI 渲染；
+# 术语表（TERMINOLOGY）自动纳入 v0.2.2 一致性检查（A1/A2/A3）与 v0.2.5 装配导出术语词典。
+
+slice_type: narrative
+version: 1
+
+sections:
+  - id: narrative-core
+    title: 叙事核心
+    en: NARRATIVE CORE
+    description: 核心冲突 / 主题 / 情感弧线，各带自洽锚点
+    template: |
+      ## 叙事核心（NARRATIVE CORE）
+
+      | 维度 | 设定 | 自洽锚点 |
+      |------|------|----------|
+      | 核心冲突 |  |  |
+      | 主题 |  |  |
+      | 情感弧线 |  |  |
+
+  - id: structure
+    title: 剧情结构
+    en: STRUCTURE
+    description: 三幕/章节划分 + 关键节拍
+    template: |
+      ## 剧情结构（STRUCTURE）
+
+      | 幕/章 | 内容 | 关键节拍 |
+      |------|------|----------|
+      |  |  |  |
+
+  - id: characters
+    title: 角色
+    en: CHARACTERS
+    description: 角色 / 动机 / 弧线
+    template: |
+      ## 角色（CHARACTERS）
+
+      | 角色 | 动机 | 弧线 |
+      |------|------|------|
+      |  |  |  |
+
+  - id: events
+    title: 关键事件
+    en: EVENTS
+    description: 事件 / 触发 / 结果
+    template: |
+      ## 关键事件（EVENTS）
+
+      | 事件 | 触发 | 结果 |
+      |------|------|------|
+      |  |  |  |
+
+  - id: text
+    title: 叙事文本
+    en: TEXT
+    description: 开场旁白 / 关键台词 / 结局文本
+    template: |
+      ## 叙事文本（TEXT）
+
+      - 开场旁白：
+
+      - 关键台词：
+
+      - 结局文本：
+
+  - id: terminology
+    title: 术语表
+    en: TERMINOLOGY
+    description: 术语定义 + 禁止混用（一致性检查器消费）
+    template: |
+      ## 术语表（TERMINOLOGY）
+
+      | 术语 | 定义 | 禁止混用 |
+      |------|------|----------|
+      |  |  |  |

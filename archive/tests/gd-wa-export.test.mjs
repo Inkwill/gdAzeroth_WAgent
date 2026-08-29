@@ -11,9 +11,9 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
-import { scanSlices, renderIndex } from "../tools/export.mjs";
+import { scanSlices, renderIndex } from "../../tools/export.mjs";
 
-const cliPath = join(dirname(fileURLToPath(import.meta.url)), "..", "tools", "gd-wa.mjs");
+const cliPath = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "tools", "gd-wa.mjs");
 
 // ── 构造切片 ─────────────────────────────────────────────────────────────────
 function mkProject(t) {

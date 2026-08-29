@@ -9,6 +9,10 @@
  *   art gen <切片名> --project <项目id> [--seed 42] [--provider comfy|dry-run]
  *                                                            参考图生成（v0.2.4）
  *   slice export --project <项目id> [--out <路径>]            切片装配导出（v0.2.5）
+ *   narrative new <切片名> --project <项目id> [--out <路径>]    叙事切片骨架（v0.3.2）
+ *   cultural-language new <切片名> --project <项目id> [--out <路径>]  文化语言切片（v0.3.3）
+ *   storyboard new <切片名> --project <项目id> [--out <路径>]  故事板骨架（v0.3.1）
+ *   storyboard render <切片名> --project <项目id> [--out <路径>] 故事板 → 单文件 HTML demo（v0.3.1）
  *
  * 不做：内容生成（高概念/设定/术语是创作产物）；不与总控 gd 命令冲突。
  */
@@ -19,6 +23,7 @@ import { fileURLToPath } from "node:url";
 import { checkProject, renderReport } from "./check.mjs";
 import { genArt } from "./artgen.mjs";
 import { scanSlices, renderIndex } from "./export.mjs";
+import { parseStoryboard, toInk, compileInk, renderHtml } from "./storyboard.mjs";
 
 // ── 极简 YAML 解析（仅支持 v0.2.1 skeleton.yaml 所需子集） ──────────────
 // 支持：2 空格缩进 / map / list of map / block scalar (`|` `>`) / 行尾注释 / 引号
@@ -151,7 +156,7 @@ function main() {
 
   const [cmd, action, ...rest] = args._;
   const name = rest[0];
-  const supported = "worldview new | worldview check | art new | art gen";
+  const supported = "worldview new | worldview check | art new | art gen | narrative new | cultural-language new | storyboard new | storyboard render";
   const unknown = () => {
     console.error(`✗ 未知命令：${[cmd, action, ...rest].filter(Boolean).join(" ")}\n  当前支持：${supported}`);
     usage();
@@ -214,10 +219,13 @@ function main() {
     return;
   }
 
-  // new 类命令：worldview new / art new（共享切片生成）
+  // new 类命令：worldview new / art new / storyboard new（共享切片生成）
   const NEW = {
     worldview: { template: "templates/worldview-skeleton.yaml", title: "世界观切片", cmdLabel: "worldview new" },
     art:       { template: "templates/art-spec.yaml",           title: "美术需求规格", cmdLabel: "art new" },
+    narrative: { template: "templates/narrative-skeleton.yaml", title: "叙事切片", cmdLabel: "narrative new" },
+    "cultural-language": { template: "templates/cultural-language-skeleton.yaml", title: "文化语言切片", cmdLabel: "cultural-language new" },
+    storyboard:{ template: "templates/storyboard-skeleton.yaml", title: "故事板骨架", cmdLabel: "storyboard new" },
   };
   if (action === "new") {
     const spec = NEW[cmd];
@@ -256,7 +264,45 @@ function main() {
     return;
   }
 
+  // storyboard render — 故事板 → 单文件 HTML demo（v0.3.1）
+  if (cmd === "storyboard" && action === "render") {
+    if (!name) { console.error("✗ 缺少 <切片名>"); usage(); process.exit(1); }
+    if (!args.project) { console.error("✗ 缺少 --project <项目id>"); usage(); process.exit(1); }
+
+    // 读取切片（与 new 产物路径对称）
+    const specRel = isAbsolute(name) ? name : join("projects", args.project, "WAgent", `${name}.md`);
+    const specAbs = isAbsolute(specRel) ? specRel : join(process.cwd(), specRel);
+    if (!existsSync(specAbs)) { console.error(`✗ 切片不存在：${specAbs}`); process.exit(1); }
+
+    // 解析 → 转 Ink → 编译 → 渲染 HTML
+    const sb = parseStoryboard(readFileSync(specAbs, "utf8"));
+    if (sb.scenes.length === 0) { console.error(`✗ 切片无场景（期望 ## 场景 · <id> 块）：${specAbs}`); process.exit(1); }
+    const ink = toInk(sb);
+    const json = compileInk(ink);
+    const html = renderHtml(sb, json);
+
+    // 输出路径（默认同目录 .html）
+    const outRel = args.out ?? specAbs.replace(/\.md$/, ".html");
+    const outAbs = isAbsolute(outRel) ? outRel : join(process.cwd(), outRel);
+    mkdirSync(dirname(outAbs), { recursive: true });
+    writeFileSync(outAbs, html, "utf8");
+
+    console.log(`✅ 故事板 HTML 已生成：${outAbs}`);
+    console.log(`   场景 ${sb.scenes.length} 个 · 起始：${sb.meta.start_scene || sb.scenes[0].id}`);
+    console.log(`   引擎：inkjs ${inkRuntimeVersion()} · 单文件可本地双击打开`);
+    console.log(`   边界：图片仅引用路径（未打包）；变量/分支后续版本`);
+    return;
+  }
+
   return unknown();
+}
+
+// inkjs 版本号（诊断用）
+function inkRuntimeVersion() {
+  try {
+    const pkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "node_modules", "inkjs", "package.json"), "utf8"));
+    return pkg.version;
+  } catch { return "?"; }
 }
 
 main();

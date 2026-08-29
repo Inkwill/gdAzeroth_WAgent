@@ -1,6 +1,7 @@
 # 版本路线图 · Roadmap（工作视图）
 
 > 已完成版本（v0.1.0 ~ v0.2.x）明细见 [version-history.md](./archive/version-history.md)
+> **当前本地版本号：0.2.0**（本地维护版本号单一事实源，主控据此同步）
 
 ---
 
@@ -36,9 +37,12 @@
 
 ### v0.3.0 — 能力深化 · 跨分控互调（🟡 当前）
 
-- [ ] narrative-design / cultural-language / ui-aesthetic 落地（依赖 worldview 先行）
+- [x] **v0.3.1** storyboard-design 基础落地（图文演示游戏：骨架 + Ink 管线 + 单文件 HTML）
+- [x] **v0.3.2** narrative-design 基础落地（叙事切片骨架：6 块 + 复用一致性检查/装配导出）
+- [x] **v0.3.3** cultural-language 基础落地（文化语言切片骨架：6 块 + 复用一致性检查/装配导出）
 - [ ] 与 PLAgent **直达互调**：表现素材可被原型按需引用（无需总控中转）
-- [ ] 音频 / UI 美学风格指导产出物标准化
+
+> ℹ️ 待办备忘已清空（2026-08-29）：原 v0.3.4 ui-aesthetic 与音频/UI 美学标准化均已从能力范围移除。
 
 ### v0.4.0 — 里程碑对齐 🏁（⏳ 目标）
 
@@ -50,7 +54,9 @@
 
 **目标：** 真实任务包处理闭环（非演练），mail 感知层实战，三切片汇聚就绪。
 
-**已完成（2026-08-27）：** mail 感知层就绪（azeroth@gd 在线、通讯录 4 联系人）；切片产出路径 `projects/<项目>/WAgent/` 实测可用。
+**已完成（2026-08-27）：** mail 感知层就绪（azeroth@gd 在线、通讯录 4 联系人）。
+
+**0.5.0 协作方式变更（2026-08-29，总控通知）：** 认领制取代拉取（task-list.yaml + `gd task status accepted`）；产出落需求级 `reqs/<需求id>/deliver_wa/`（不再项目级 WAgent/）；分控端不建 projects/ 目录；无 rejected（不接 = 保持 new + mail question）。
 
 **待推进（依赖总控）：** 真实派单（当前无在途任务）→ question 澄清通道实战（先澄清后拒绝）→ 参与 gdMain 端到端演练。**验收线：** 真实闭环跑通、演练通过、无残留。
 
@@ -63,6 +69,7 @@
 | ⏸ 等待总控 | gdMain L1 分层推进中（v0.5.x display/rule 演练先行），v0.5.0 依赖其发布 + 真实派单 |
 | 🎨 能力独特性 | 美术参考图是「参考资源」非最终资产——管线边界需明确，避免越界 PLAgent 原型资产 |
 | 🤝 协作依赖 | v0.3.0 直达互调需 greymaze bridge-spec §4.5 配合（触发条件待满足） |
+| 📖 storyboard 限制 | 正文/选项含 `${` 会与 Ink 插值语法冲突（编译报错已友好提示）；图片仅引用路径不打包（避免越界 PLAgent 资产） |
 
 ---
 
