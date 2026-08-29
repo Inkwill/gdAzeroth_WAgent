@@ -2,7 +2,7 @@
 # 机器可读的 6 块骨架定义，供 gd-wa CLI 渲染；对齐 art-style 能力声明。
 # 设计要点：ART BRIEF 各维度带"自洽锚点"列（延续 ASPECTS 锚点理念，供一致性检查）；
 # FORBIDDEN 禁忌表（禁忌项|原因）与术语表"禁止混用"同思路，为后续检查器扩展铺路。
-# 规范见 docs/roadmap.md v0.2.3 · v1
+# 规范见 roadmap.md v0.2.3 · v1
 
 slice_type: art-spec
 version: 1

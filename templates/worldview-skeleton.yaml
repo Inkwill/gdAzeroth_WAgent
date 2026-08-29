@@ -1,6 +1,6 @@
 # 世界观切片骨架（v0.2.1）
 # 机器可读的 4 块骨架定义，供 gd-wa CLI 渲染与未来 0.2.2 一致性检查器消费。
-# 规范见 docs/roadmap.md v0.2.1 · v1
+# 规范见 roadmap.md v0.2.1 · v1
 
 slice_type: worldview
 version: 1

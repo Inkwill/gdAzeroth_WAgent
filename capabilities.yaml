@@ -1,20 +1,56 @@
-# 能力声明 — gdAzeroth (WAgent) · 肌肤 · 外在感性包装
+# 能力声明 — gdAzeroth (WAgent) · 世界 · 概念层
 # 规范见 gdMain blueprint/schemas/capabilities.md · JSON Schema 见 capabilities.schema.json
 # 自持于分控仓库根（0.4.6 分控侧闭环，v0.1.0 契约落地）；总控 blueprint/agents/azeroth/ 下为遗留同步副本
+# 0.5.0 同步（2026-08-28）：
+#   - 标题：肌肤 · 外在感性包装 → 世界 · 概念层
+#   - 新增 3 个主能力：display-design / rule-design / rulebook-design
+#   - 子能力（worldview / narrative / art-style / cultural-language / ui-aesthetic）保留为 display 范畴实施细节
+#   - 子能力 prerequisites 由 worldview-design 改为 display-design（向后兼容 + 层级关系）
 # 约束：description 单行 / prerequisites 逗号字符串 / kebab-case id / 2 空格缩进
 
 agent: azeroth
 schema_version: 1
-updated: 2026-08-27
+updated: 2026-08-28
 
 capabilities:
+  # === 主能力（display 范畴）===
+  - id: display-design
+    name: 呈现层设计
+    description: 世界观/叙事/文化/美术/UI 美学等呈现层设计（display 范畴总入口；整合 worldview/narrative/art-style/cultural-language/ui-aesthetic 等子能力）
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: ""
+    status: stable
+
+  # === 主能力（rule 范畴）===
+  - id: rule-design
+    name: 玩法规则设计
+    description: 核心循环 / 玩家行为框架 / 胜负判定（不含具体数值公式）
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: ""
+    status: stable
+
+  # === 主能力（rulebook 范畴，按需求驱动）===
+  - id: rulebook-design
+    name: 文字规则集整合
+    description: 整合 display + rule 为可读可玩的文字规则集（按需求驱动，非项目默认交付）
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: WAgent
+    prerequisites: "azeroth:display-design, azeroth:rule-design"
+    status: stable
+
+  # === display 子能力（实施细节）===
   - id: worldview-design
     name: 世界观构建
     description: 世界观架构与设定
     input_kind: brief
     output_kind: doc_slice
     output_dir: WAgent
-    prerequisites: ""
+    prerequisites: "azeroth:display-design"
     status: stable
   - id: narrative-design
     name: 叙事设计
@@ -22,7 +58,7 @@ capabilities:
     input_kind: brief
     output_kind: doc_slice
     output_dir: WAgent
-    prerequisites: "azeroth:worldview-design"
+    prerequisites: "azeroth:display-design"
     status: stable
   - id: art-style
     name: 美术风格
@@ -30,7 +66,7 @@ capabilities:
     input_kind: brief
     output_kind: doc_slice
     output_dir: WAgent
-    prerequisites: ""
+    prerequisites: "azeroth:display-design"
     status: stable
   - id: cultural-language
     name: 文化语言
@@ -38,7 +74,7 @@ capabilities:
     input_kind: brief
     output_kind: doc_slice
     output_dir: WAgent
-    prerequisites: "azeroth:worldview-design"
+    prerequisites: "azeroth:display-design"
     status: stable
   - id: ui-aesthetic
     name: UI 美学
@@ -46,5 +82,5 @@ capabilities:
     input_kind: ref
     output_kind: doc_slice
     output_dir: WAgent
-    prerequisites: ""
+    prerequisites: "azeroth:display-design"
     status: stable
