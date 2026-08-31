@@ -95,3 +95,4 @@ reqs/<需求id>/deliver_wa/   ← 概念层切片（display + rule）需求级�
 | 能力声明 | `capabilities.yaml` | 接口契约 0.4.6 自持声明（已落盘；display-design / rule-design / storyboard-design 三主能力 + display 子能力） |
 | 能力工具链 CLI | `docs/cli.md` | `gd-wa worldview new/check · art new/gen · narrative new · cultural-language new · slice export · storyboard new/render …` 切片生成 / 一致性检查 / 美术规格 / 参考图 / 叙事 / 文化语言 / 装配导出 / 图文演示游戏 |
 | 生图实战手册 | `docs/artgen-playbook.md` | ComfyUI 生图方法论：调用链/环境前置/排障/prompt 工程/筛种 |
+| 立项书撰写手册 | `docs/l0-proposal-playbook.md` | 立项书方法论 v1：10 章结构/三重使命/逐章要点/验收自检/常见坑（案例：T-gt-01 重构版） |

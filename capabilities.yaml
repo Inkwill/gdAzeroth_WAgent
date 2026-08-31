@@ -6,11 +6,12 @@
 #   - 新增 3 个主能力：display-design / rule-design / storyboard-design（原 rulebook-design 更名，2026-08-29）
 #   - 子能力（worldview / narrative / art-style / cultural-language）保留为 display 范畴实施细节
 #   - 子能力 prerequisites 由 worldview-design 改为 display-design（向后兼容 + 层级关系）
+# 0.5.2 同步（2026-08-31）：新增主能力 proposal-design（L0 立项书设计，方法论 docs/l0-proposal-playbook.md v1）
 # 约束：description 单行 / prerequisites 逗号字符串 / kebab-case id / 2 空格缩进
 
 agent: azeroth
 schema_version: 1
-updated: 2026-08-29
+updated: 2026-08-31
 
 capabilities:
   # === 主能力（display 范畴）===
@@ -43,6 +44,16 @@ capabilities:
     prerequisites: "azeroth:display-design, azeroth:rule-design"
     status: stable
 
+
+  # === 主能力（L0 立项范畴，按需求驱动）===
+  - id: proposal-design
+    name: 立项书设计
+    description: 撰写 L0 立项书（定位/玩法核心/范围边界锁定，10 章方法论，见 docs/l0-proposal-playbook.md v1；按需求驱动，非项目默认交付）
+    input_kind: brief
+    output_kind: doc_slice
+    output_dir: deliver_wa
+    prerequisites: "azeroth:display-design, azeroth:rule-design"
+    status: stable
   # === display 子能力（实施细节）===
   - id: worldview-design
     name: 世界观构建
