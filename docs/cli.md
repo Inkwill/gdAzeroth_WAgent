@@ -118,7 +118,7 @@ gd-wa worldview check --project demo-foo
 gd-wa art new <切片名> --project <项目id> [--out <路径>]
 ```
 
-对齐 **art-style** 能力声明（美术风格定位与参考资源，output_dir: WAgent）。
+对齐 **art-style** 能力声明（美术风格定位与参考资源）。
 
 ### 切片结构（6 块，对齐骨架声明）
 

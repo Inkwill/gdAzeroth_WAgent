@@ -40,6 +40,8 @@
 - [x] **v0.3.1** storyboard-design 基础落地（图文演示游戏：骨架 + Ink 管线 + 单文件 HTML）
 - [x] **v0.3.2** narrative-design 基础落地（叙事切片骨架：6 块 + 复用一致性检查/装配导出）
 - [x] **v0.3.3** cultural-language 基础落地（文化语言切片骨架：6 块 + 复用一致性检查/装配导出）
+- [x] **生图管线基准测试** ✅ 2026-09-02（#10 卖点图 4:3 · 热缓存纯生成耗时）：P-01 84.4s(30步) / P-02 75.4s / P-03 384.8s（kref 固有开销确认，~4.6×P-01） / P-04 21.6s(8步)；krea2/z_image 冷加载均 <1min；产出 GT_10_bond_P01~P04；基准脚本 tools/benchmark_pipelines.py；细节已回写 pipeline-registry v1.1
+- [ ] **产图 SOP 固化耗时记录**：SKILL.md §4 增加「记录耗时」步骤，每次生成后增量更新 pipeline-registry 变更记录
 - [ ] 与 PLAgent **直达互调**：表现素材可被原型按需引用（无需总控中转）
 
 > ℹ️ 待办备忘已清空（2026-08-29）：原 v0.3.4 ui-aesthetic 与音频/UI 美学标准化均已从能力范围移除。

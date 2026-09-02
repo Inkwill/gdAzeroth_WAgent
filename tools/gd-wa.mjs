@@ -244,7 +244,7 @@ function main() {
       process.exit(1);
     }
 
-    // 输出路径（与能力声明 output_dir: WAgent 对齐）
+    // 输出路径（默认 projects/<项目id>/WAgent/，可由 --out 覆盖）
     const outRel = args.out ?? join("projects", args.project, "WAgent", `${name}.md`);
     const outAbs = isAbsolute(outRel) ? outRel : join(process.cwd(), outRel);
     if (existsSync(outAbs)) { console.error(`✗ 目标已存在，拒绝覆盖：${outAbs}`); process.exit(1); }

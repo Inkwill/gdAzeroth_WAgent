@@ -1,17 +1,18 @@
 # 能力声明 — gdAzeroth (WAgent) · 世界 · 概念层
 # 规范见 gdMain blueprint/schemas/capabilities.md · JSON Schema 见 capabilities.schema.json
-# 自持于分控仓库根（0.4.6 分控侧闭环，v0.1.0 契约落地）；总控 blueprint/agents/azeroth/ 下为遗留同步副本
+# 自持于分控仓库根（0.4.6 分控侧闭环，v0.1.0 契约落地）
 # 0.5.0 同步（2026-08-28）：
 #   - 标题：肌肤 · 外在感性包装 → 世界 · 概念层
 #   - 新增 3 个主能力：display-design / rule-design / storyboard-design（原 rulebook-design 更名，2026-08-29）
 #   - 子能力（worldview / narrative / art-style / cultural-language）保留为 display 范畴实施细节
 #   - 子能力 prerequisites 由 worldview-design 改为 display-design（向后兼容 + 层级关系）
 # 0.5.2 同步（2026-08-31）：新增主能力 proposal-design（L0 立项书设计，方法论 docs/l0-proposal-playbook.md v1）
+# 0.6.0 同步（2026-09-01）：新增子能力 concept-art-generation（概念图生成·ComfyUI 实施，docs/comfyui-concept-art-plan.md v0.1）
 # 约束：description 单行 / prerequisites 逗号字符串 / kebab-case id / 2 空格缩进
 
 agent: azeroth
 schema_version: 1
-updated: 2026-08-31
+updated: 2026-09-01
 
 capabilities:
   # === 主能力（display 范畴）===
@@ -20,7 +21,6 @@ capabilities:
     description: 世界观/叙事/文化/美术等呈现层设计（display 范畴总入口；整合 worldview/narrative/art-style/cultural-language 等子能力）
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: ""
     status: stable
 
@@ -30,7 +30,6 @@ capabilities:
     description: 核心循环 / 玩家行为框架 / 胜负判定（不含具体数值公式）
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: ""
     status: stable
 
@@ -40,7 +39,6 @@ capabilities:
     description: 设计并生成「文字+图片的纯演示型游戏」（单文件 HTML demo，Ink + inkjs 引擎；按需求驱动，非项目默认交付）
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: "azeroth:display-design, azeroth:rule-design"
     status: stable
 
@@ -51,7 +49,6 @@ capabilities:
     description: 撰写 L0 立项书（定位/玩法核心/范围边界锁定，10 章方法论，见 docs/l0-proposal-playbook.md v1；按需求驱动，非项目默认交付）
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: "azeroth:display-design, azeroth:rule-design"
     status: stable
   # === display 子能力（实施细节）===
@@ -60,7 +57,6 @@ capabilities:
     description: 世界观架构与设定
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: "azeroth:display-design"
     status: stable
   - id: narrative-design
@@ -68,7 +64,6 @@ capabilities:
     description: 故事剧情与叙事文本
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: "azeroth:display-design"
     status: stable
   - id: art-style
@@ -76,14 +71,19 @@ capabilities:
     description: 美术风格定位与参考资源
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: "azeroth:display-design"
     status: stable
+  - id: concept-art-generation
+    name: 概念图生成（ComfyUI）
+    description: 基于本地 ComfyUI 生成游戏概念图（checkpoint + 提示词 + workflow），输出 PNG/JPG，风格对齐 T-gt-03 美术风格概念（见 docs/comfyui-concept-art-plan.md）
+    input_kind: brief
+    output_kind: image
+    prerequisites: "azeroth:art-style"
+    status: draft
   - id: cultural-language
     name: 文化语言
     description: 文化语境与语言风格
     input_kind: brief
     output_kind: doc_slice
-    output_dir: deliver_wa
     prerequisites: "azeroth:display-design"
     status: stable
